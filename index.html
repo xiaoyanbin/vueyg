@@ -1,0 +1,58 @@
+<html>
+<head>
+	<meta charset="utf-8" />
+	<title></title>
+     <script type="text/javascript" src="socket.io.js"></script>
+</head>
+<body>
+	<h1></h1>
+	<input id="sendTxt" type="text"/>
+	<button id="sendBtn">发送</button>
+	<div id="recv"></div>
+	<script type="text/javascript">
+     var socket = io("ws://localhost:3003/");
+
+     function showMessage(str, type){
+          alert(1)
+          var div = document.createElement('div');
+          div.innerHTML = str;
+          console.log(str);
+          if(type == "enter"){
+               div.style.color = "blue"
+          }else if(type == "leave"){
+               div.style.color = "red"
+          }
+          document.body.appendChild(div);
+     }
+
+     document.getElementById("sendBtn").onclick = function(){
+
+          var txt = document.getElementById("sendTxt").value;
+
+          if(txt){
+               console.log(txt);
+               socket.emit('message',txt);   
+          }
+     }   
+
+     socket.on('enter', function(data) {
+          console.log(1);
+          showMessage(data, 'enter');
+     })
+
+     socket.on('message', function(data) {
+          console.log(2);
+          showMessage(data, 'message');
+     })
+
+     socket.on('leave', function(data) {
+          console.log(3);
+          showMessage(data, 'leave');
+     })
+  
+
+	</script>
+
+
+</body>
+</html>
